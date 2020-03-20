@@ -69,8 +69,8 @@ class IntroPage extends StatelessWidget {
       skipText: Text(AppLocalizations.of(context).translate('SKIP')),
       nextText: Text(AppLocalizations.of(context).translate('NEXT')),
       doneText: Text(AppLocalizations.of(context).translate('FINISH')),
-      onTapDoneButton: () {
-        Navigator.pushNamed(context, '/main');
+      onTapDoneButton: () { 
+        Navigator.of(context).pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
       },
       pageButtonTextStyles: TextStyle(
         color: Colors.white,

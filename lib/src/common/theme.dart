@@ -13,8 +13,8 @@ class AppConceptThemeProvider {
       disabledColor: Color(0xffffbb76),
       hoverColor: Color(0x19000000),
       canvasColor: Colors.white,
-      scaffoldBackgroundColor: Colors.white,
-      cardColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white, 
+      cardColor: Colors.white, 
       textTheme: TextTheme(
           display1: TextStyle(
             color: Color(0x60717171),

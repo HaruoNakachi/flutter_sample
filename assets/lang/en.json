@@ -5,6 +5,7 @@
     "SKIP": "Skip",
     "FINISH": "Finish",
     "DELETE": "Delete",
+    "SAVE": "Save",
     "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_POST": "Are you sure you want to delete this post?",
     "CANCEL": "Cancel",
     "ACCEPT": "Accept",
@@ -13,6 +14,8 @@
     "INTRO_TITLE_2": "Intro 2",
     "INTRO_DESCRIPTION_2": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     "INTRO_TITLE_3": "Intro 3",
-    "INTRO_DESCRIPTION_3": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-
+    "INTRO_DESCRIPTION_3": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "ADD_POST": "Add Post",
+    "POST_TITLE": "Title",
+    "POST_DESCRIPTION": "Description" 
 }

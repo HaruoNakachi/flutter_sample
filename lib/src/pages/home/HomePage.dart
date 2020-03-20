@@ -77,14 +77,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: makeListTile(lesson),
           ),
         );
-    final makeBody = Container(
-      // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
+    final makeBody = Container( 
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: posts.length,
+        // itemCount: posts.length,
+        itemCount: 100,
         itemBuilder: (BuildContext context, int index) {
-          return makeCard(posts[index]);
+          return makeCard(posts[0]);
         },
       ),
     );
@@ -98,7 +98,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         title: Text(AppLocalizations.of(context).translate('APP')),
         centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.add, color: Colors.white,))
+          IconButton(
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/post/create'),
+            )
         ],
       ),
       body: makeBody,
@@ -106,14 +109,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 }
 
-List<PostModel> getPost() {
+List<PostModel> getPost() { 
   return [
     PostModel(
         id: 1,
         title: 'What is Lorem Ipsum?',
         description:
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s',
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s',
         image:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRkju91a7pqVFYYUek01k0HOhvUMwnP1EQFa5_scC0R2AngPJDy')
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRkju91a7pqVFYYUek01k0HOhvUMwnP1EQFa5_scC0R2AngPJDy'),
+            
   ];
 }
