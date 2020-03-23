@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterapp/generated/app_localizations.dart';
 import 'package:flutterapp/model/PostModel.dart';
-import 'package:flutterapp/src/common/global.dart';
+import 'package:flutterapp/services/PostServices.dart';
+import 'package:flutterapp/src/common/lib.dart';
 import 'package:flutterapp/src/common/theme.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,13 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  List<PostModel> posts;
-  var openNotification = false;
+  List<PostModel> postList = List<PostModel>();
 
   @override
   void initState() {
-    posts = getPost();
-    print(posts.length);
     super.initState();
   }
 
@@ -30,17 +30,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget build(BuildContext context) {
     final themeData = AppConceptThemeProvider.get();
+    Image converBase64ToImage(base64Image) {
+      var _bytesImage = Base64Decoder().convert(base64Image);
+      return Image.memory(_bytesImage);
+    }
+
     ListTile makeListTile(PostModel post) => ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-          leading: FadeInImage.assetNetwork(
-            placeholder: imageDefault,
-            image: post.image,
-            width: 60,
-            height: 60,
-            fit: BoxFit.cover,
-          ),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          leading: converBase64ToImage(post.image),
           title: Text(
-            post.title,
+            post.title != null ? post.title : "",
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
             softWrap: true,
@@ -49,17 +49,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 fontWeight: FontWeight.bold,
                 fontSize: 14),
           ),
-          
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Text(
-            post.description,
-            overflow: TextOverflow.ellipsis,
-            softWrap: true,
-            maxLines: 3,
-            style: TextStyle(
-                color: themeData.textTheme.display3.color, fontSize: 12),
-          ),),
+              post.description != null ? post.description : "",
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              maxLines: 3,
+              style: TextStyle(
+                  color: themeData.textTheme.display3.color, fontSize: 12),
+            ),
+          ),
           trailing:
               Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 20.0),
           onTap: () {
@@ -77,47 +77,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: makeListTile(lesson),
           ),
         );
-    final makeBody = Container( 
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        // itemCount: posts.length,
-        itemCount: 100,
-        itemBuilder: (BuildContext context, int index) {
-          return makeCard(posts[0]);
-        },
-      ),
-    );
+    makeBody(ListPostModels list) {
+      return Container(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: list.items.length,
+          itemBuilder: (BuildContext context, int index) {
+            return makeCard(list.items[index]);
+          },
+        ),
+      );
+    }
 
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-        title: Text(AppLocalizations.of(context).translate('APP')),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () => Navigator.pushNamed(context, '/post/create'),
-            )
-        ],
-      ),
-      body: makeBody,
-    ));
+            backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+              title: Text(AppLocalizations.of(context).translate('APP')),
+              centerTitle: true,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add, color: Colors.white),
+                  onPressed: () => Navigator.pushNamed(context, '/post/createAndUpdate'),
+                )
+              ],
+            ),
+            body: FutureBuilder<QueryResult>(
+                future: PostService.getAll(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) { 
+                    ListPostModels list = ListPostModels.fromJson(
+                        snapshot.data.data['listPostModels']);
+                    return makeBody(list);
+                  }
+                  return showLoading();
+                })));
   }
-}
-
-List<PostModel> getPost() { 
-  return [
-    PostModel(
-        id: 1,
-        title: 'What is Lorem Ipsum?',
-        description:
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s',
-        image:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRkju91a7pqVFYYUek01k0HOhvUMwnP1EQFa5_scC0R2AngPJDy'),
-            
-  ];
 }

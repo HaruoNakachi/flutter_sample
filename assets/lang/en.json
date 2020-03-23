@@ -17,5 +17,8 @@
     "INTRO_DESCRIPTION_3": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     "ADD_POST": "Add Post",
     "POST_TITLE": "Title",
-    "POST_DESCRIPTION": "Description" 
+    "POST_TITLE_REQUIRED": "Title is required",
+    "POST_DESCRIPTION": "Description",
+    "POST_DESCRIPTION_REQUIRED": "Description is required"
+
 }

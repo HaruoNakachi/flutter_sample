@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/src/pages/home/HomePage.dart';
-import 'package:flutterapp/src/pages/post/CreatePostPage.dart';
+import 'package:flutterapp/src/pages/post/CreateUpdatePostPage.dart'; 
 import 'package:flutterapp/src/pages/post/DetailPostPage.dart'; 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -10,8 +10,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => HomePage()); 
     case '/post':
     return MaterialPageRoute(builder: (context) => DetailPostPage(data: settings.arguments)); 
-     case '/post/create':
-    return MaterialPageRoute(builder: (context) => CreatePostPage()); 
+     case '/post/createAndUpdate':
+    return MaterialPageRoute(builder: (context) => CreateUpdatePostPage(data: settings.arguments)); 
     default:
       return MaterialPageRoute(builder: (context) => HomePage());
   }

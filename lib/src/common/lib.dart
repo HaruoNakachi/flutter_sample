@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutterapp/generated/app_localizations.dart';
+import 'package:flutter/material.dart'; 
 
 showSnackBar(String title) {
   return SnackBar(
@@ -17,3 +16,25 @@ showSnackBar(String title) {
   );
 }
 
+
+showLoading() {
+  return Container(
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Color(0xffdeab49)),
+        ),
+      ));
+}
+showLoadingPage(bool show) {
+  return Visibility(
+    visible: show,
+    child: Positioned( 
+      child: Container(
+          color: Colors.black38,
+          padding: const EdgeInsets.all(20),
+          child: Center(
+              child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(Color(0xffdeab49)),
+          )))),);
+}
