@@ -33,3 +33,9 @@ The Flutter plugins for IntelliJ and VSCode support running tests. This is often
 > 2. Select the Run menu
 > 3. Click the Run 'tests in unit_test.dart' option
 > 4. Alternatively, use the appropriate keyboard shortcut for your platform.
+# VSCode
+> 1. Open the counter_test.dart file
+> 2. Select the Debug menu
+> 3. Click the Start Debugging option
+> 4. Alternatively, use the appropriate keyboard shortcut for your platform.
+
