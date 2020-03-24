@@ -32,7 +32,7 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
   Uint8List _bytesImage;
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 400);
     setState(() {
       _image = image;
       List<int> imageBytes = _image.readAsBytesSync();
@@ -87,6 +87,11 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                       if (widget.data != null) {
                         PostService.update(widget.data.id,_title, _description, base64Image)
                             .then((result) {
+                              
+                          if(result.hasException){
+                            print(result.exception);
+
+                          }    
                           if (result.data != null) {
                            Navigator.pop(context, true);
                           }
