@@ -1,9 +1,18 @@
-import 'package:flutterapp/src/common/GraphQLConfiguration.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutterapp/src/common/global.dart';
+import "package:gql_exec/gql_exec.dart";
+import "package:gql/language.dart";
+import 'package:gql_http_link/gql_http_link.dart';
 
 class PostService {
-  static Future<QueryResult> getAll() async {
-    final QueryOptions _options = QueryOptions(documentNode: gql(r'''
+  static var link = HttpLink(
+    AWS_APP_SYNC_ENDPOINT,
+    defaultHeaders: {"x-api-key": AWS_APP_SYNC_KEY},
+  );
+  static Stream<Response> getAll() {
+    var result = link.request(
+      Request(
+          operation: Operation(
+        document: parseString(r'''
                    query listPostModels {
         listPostModels {
           items {
@@ -13,16 +22,20 @@ class PostService {
             image
           }
         }
-      } 
-                '''));
-    var result = await clientGraphQL().query(_options);
+      }
+                '''),
+      )),
+    );
+
     return result;
   }
 
-  static Future<QueryResult> getDetail(id) async {
-    final QueryOptions _options = QueryOptions(
-      documentNode: gql(r'''
-                  query getPostModel($id: ID!)  {
+  static Stream<Response> getDetail(id) {
+    var result = link.request(
+      Request(
+        operation: Operation(
+          document: parseString(r'''
+                       query getPostModel($id: ID!)  {
                     getPostModel(id: $id) {
                       id
                       title
@@ -31,33 +44,39 @@ class PostService {
                     }
                   }
                 '''),
-      variables: {'id': id},
+        ),
+        variables: <String, dynamic>{"id": id},
+      ),
     );
-    var result = await clientGraphQL().query(_options);
     return result;
   }
 
-  static Future<QueryResult> remove(id) async {
-    final MutationOptions _options = MutationOptions(
-      documentNode: gql(r'''
-                  mutation deletePostModel($deletemodelinput: DeletePostModelInput!) {
+  static Stream<Response> remove(id) {
+    var result = link.request(
+      Request(
+        operation: Operation(
+          document: parseString(r'''
+                       mutation deletePostModel($deletemodelinput: DeletePostModelInput!) {
                     deletePostModel(input: $deletemodelinput) {
                       id
                     }
                   }
                 '''),
-      variables: {
-        "deletemodelinput": {"id": id}
-      },
+        ),
+        variables: {
+          "deletemodelinput": {"id": id}
+        },
+      ),
     );
-    var result = await clientGraphQL().mutate(_options);
     return result;
   }
 
- static Future<QueryResult> add(_title,_description,base64Image) async {
-    final MutationOptions _options = MutationOptions(
-      documentNode: gql(r'''
-                          mutation createPostModel($createpostmodelinput: CreatePostModelInput!) {
+  static Stream<Response> add(_title, _description, base64Image) {
+    var result = link.request(
+      Request(
+        operation: Operation(
+          document: parseString(r'''
+                        mutation createPostModel($createpostmodelinput: CreatePostModelInput!) {
                             createPostModel(input: $createpostmodelinput) {
                               id
                               title
@@ -65,23 +84,26 @@ class PostService {
                               image
                             }
                           }
-                        '''),
-      variables: {
-        "createpostmodelinput": {
-          "title": _title,
-          "description": _description,
-          "image": base64Image
-        }
-      },
+                '''),
+        ),
+        variables: {
+          "createpostmodelinput": {
+            "title": _title,
+            "description": _description,
+            "image": base64Image
+          }
+        },
+      ),
     );
-    var result = await clientGraphQL().mutate(_options);
     return result;
   }
 
-  static Future<QueryResult> update(_id,_title,_description,base64Image) async {
-    final MutationOptions _options = MutationOptions(
-      documentNode: gql(r'''
-                          mutation updatePostModel($updatepostmodelinput: UpdatePostModelInput!) {
+  static Stream<Response> update(_id, _title, _description, base64Image) {
+    var result = link.request(
+      Request(
+        operation: Operation(
+          document: parseString(r'''
+                        mutation updatePostModel($updatepostmodelinput: UpdatePostModelInput!) {
                             updatePostModel(input: $updatepostmodelinput) {
                               id
                               title
@@ -89,19 +111,19 @@ class PostService {
                               image
                             }
                           }
-                        '''),
-      variables: {
-        "updatepostmodelinput": {
-          "id": _id,
-          "title": _title,
-          "description": _description,
-          "image": base64Image
-        }
-      },
+                '''),
+        ),
+        variables: {
+          "updatepostmodelinput": {
+            "id": _id,
+            "title": _title,
+            "description": _description,
+            "image": base64Image
+          }
+        },
+      ),
     );
-    var result = await clientGraphQL().mutate(_options);
+
     return result;
   }
-
-
 }

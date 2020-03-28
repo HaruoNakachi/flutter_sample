@@ -1,12 +1,11 @@
-import 'dart:convert';  
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutterapp/generated/app_localizations.dart';
 import 'package:flutterapp/model/PostModel.dart';
 import 'package:flutterapp/services/PostServices.dart';
 import 'package:flutterapp/src/common/lib.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:gql_exec/gql_exec.dart';
 
 class DetailPostPage extends StatefulWidget {
   final PostModel data;
@@ -18,20 +17,20 @@ class DetailPostPage extends StatefulWidget {
   _DetailPostPageState createState() => _DetailPostPageState();
 }
 
-class _DetailPostPageState extends State<DetailPostPage> with TickerProviderStateMixin {
-
+class _DetailPostPageState extends State<DetailPostPage>
+    with TickerProviderStateMixin {
   Widget build(BuildContext context) {
-    return FutureBuilder<QueryResult>(
-        future: PostService.getDetail(widget.data.id),
+    return StreamBuilder<Response>(
+        stream: PostService.getDetail(widget.data.id),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-           
             PostModel post =
                 PostModel.fromJson(snapshot.data.data['getPostModel']);
             Image converBase64ToImage(base64Image) {
               var _bytesImage = Base64Decoder().convert(base64Image);
               return Image.memory(_bytesImage);
-            } 
+            }
+
             return Scaffold(
               body: NestedScrollView(
                 headerSliverBuilder:
@@ -57,7 +56,9 @@ class _DetailPostPageState extends State<DetailPostPage> with TickerProviderStat
                             Icons.edit,
                             color: Colors.white,
                           ),
-                          onPressed: () =>  Navigator.pushNamed(context, '/post/createAndUpdate', arguments: post),
+                          onPressed: () => Navigator.pushNamed(
+                              context, '/post/createAndUpdate',
+                              arguments: post),
                         ),
                         IconButton(
                           icon: Icon(
@@ -67,7 +68,6 @@ class _DetailPostPageState extends State<DetailPostPage> with TickerProviderStat
                           onPressed: () =>
                               showDialogDeletePost(context, post.id),
                         ),
-                        
                       ],
                     ),
                   ];
@@ -112,14 +112,12 @@ showDialogDeletePost(context, id) {
             child: Text(AppLocalizations.of(context).translate('ACCEPT'),
                 style: TextStyle(color: Colors.white)),
             onPressed: () {
-              PostService.remove(id).then((result) {
+              PostService.remove(id).listen((result) {
                 if (result.data != null) {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 }
-              }).catchError((e) {
-                return false;
-              }).whenComplete(() => null);
+              });
             },
           ),
           FlatButton(

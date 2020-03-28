@@ -85,32 +85,17 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                       });
                       _key.currentState.save();
                       if (widget.data != null) {
-                        PostService.update(widget.data.id,_title, _description, base64Image)
-                            .then((result) {
-                              
-                          if(result.hasException){
-                            print(result.exception);
-
-                          }    
-                          if (result.data != null) {
-                           Navigator.pop(context, true);
+                        PostService.update(widget.data.id,_title, _description, base64Image).listen((result) { 
+                            if (result.data != null) {
+                              Navigator.pop(context, true);
                           }
-                        }).catchError((e) {
-                          return false;
-                        }).whenComplete(() => setState(() {
-                                  _isLoading = false;
-                                }));
+                        });
                       } else {
-                        PostService.add(_title, _description, base64Image)
-                            .then((result) {
-                          if (result.data != null) {
+                        PostService.add(_title, _description, base64Image).listen((result) {
+                           if (result.data != null) {
                             Navigator.of(context).pop();
                           }
-                        }).catchError((e) {
-                          return false;
-                        }).whenComplete(() => setState(() {
-                                  _isLoading = false;
-                                }));
+                        });
                       }
                     } else {
                       setState(() {
@@ -127,7 +112,8 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
           ],
         ),
       )),
-      body: Stack(
+      body: 
+      Stack(
         children: <Widget>[
           SingleChildScrollView(
             child: Container(

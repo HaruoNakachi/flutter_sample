@@ -8,7 +8,7 @@ import 'package:flutterapp/model/PostModel.dart';
 import 'package:flutterapp/services/PostServices.dart';
 import 'package:flutterapp/src/common/lib.dart';
 import 'package:flutterapp/src/common/theme.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:gql_exec/gql_exec.dart'; 
 
 class HomePage extends StatefulWidget {
   @override
@@ -105,10 +105,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 )
               ],
             ),
-            body: FutureBuilder<QueryResult>(
-                future: PostService.getAll(),
+            body: StreamBuilder<Response>(
+                stream: PostService.getAll(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data != null) { 
+                  if (snapshot.hasData && snapshot.data != null) {  
                     ListPostModels list = ListPostModels.fromJson(
                         snapshot.data.data['listPostModels']);
                     return makeBody(list);
