@@ -24,3 +24,18 @@ Android Studio offers a complete, integrated IDE experience for Flutter.
 ![Image description](https://flutter.dev/assets/tools/android-studio/main-toolbar-857fe8c36d38020e27b502ec643ea8b1716edbe150cc6e39e3560f8fb7bda5b2.png)
 2. In the **target selector**, select an Android device for running the app. If none are listed as available, select **Tools> Android > AVD Manager** and create one there. For details, see [Managing AVDs](https://developer.android.com/studio/run/managing-avds).
 3. Click the run icon in the toolbar, or invoke the menu item **Run > Run**.
+
+# Run tests using IntelliJ or VSCode
+The Flutter plugins for IntelliJ and VSCode support running tests. This is often the best option while writing tests because it provides the fastest feedback loop as well as the ability to set breakpoints.
+
+# IntelliJ
+> 1. Open the unit_test.dart file
+> 2. Select the Run menu
+> 3. Click the Run 'tests in unit_test.dart' option
+> 4. Alternatively, use the appropriate keyboard shortcut for your platform.
+# VSCode
+> 1. Open the counter_test.dart file
+> 2. Select the Debug menu
+> 3. Click the Start Debugging option
+> 4. Alternatively, use the appropriate keyboard shortcut for your platform.
+
