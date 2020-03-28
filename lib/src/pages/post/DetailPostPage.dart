@@ -26,10 +26,7 @@ class _DetailPostPageState extends State<DetailPostPage>
           if (snapshot.hasData && snapshot.data != null) {
             PostModel post =
                 PostModel.fromJson(snapshot.data.data['getPostModel']);
-            Image converBase64ToImage(base64Image) {
-              var _bytesImage = Base64Decoder().convert(base64Image);
-              return Image.memory(_bytesImage);
-            }
+          
 
             return Scaffold(
               body: NestedScrollView(
@@ -48,7 +45,6 @@ class _DetailPostPageState extends State<DetailPostPage>
                               color: Colors.white,
                               fontSize: 16.0,
                             )),
-                        background: converBase64ToImage(post.image),
                       ),
                       actions: <Widget>[
                         IconButton(

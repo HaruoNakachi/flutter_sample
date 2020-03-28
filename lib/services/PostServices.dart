@@ -71,7 +71,7 @@ class PostService {
     return result;
   }
 
-  static Stream<Response> add(_title, _description, base64Image) {
+  static Stream<Response> add(_title, _description,) {
     var result = link.request(
       Request(
         operation: Operation(
@@ -89,8 +89,7 @@ class PostService {
         variables: {
           "createpostmodelinput": {
             "title": _title,
-            "description": _description,
-            "image": base64Image
+            "description": _description
           }
         },
       ),
@@ -98,7 +97,7 @@ class PostService {
     return result;
   }
 
-  static Stream<Response> update(_id, _title, _description, base64Image) {
+  static Stream<Response> update(_id, _title, _description) {
     var result = link.request(
       Request(
         operation: Operation(
@@ -117,8 +116,7 @@ class PostService {
           "updatepostmodelinput": {
             "id": _id,
             "title": _title,
-            "description": _description,
-            "image": base64Image
+            "description": _description
           }
         },
       ),

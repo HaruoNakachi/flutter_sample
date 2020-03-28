@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapp/generated/app_localizations.dart';
-import 'package:flutterapp/src/pages/intro/IntroPage.dart'; 
+import 'package:flutterapp/src/pages/home/HomePage.dart';
 
 class StartupPage extends StatefulWidget {
   @override
@@ -11,6 +10,6 @@ class _StartupPageState extends State<StartupPage> {
   @override
   Widget build(BuildContext context) {
      
-    return IntroPage();
+    return HomePage();
   }
 }

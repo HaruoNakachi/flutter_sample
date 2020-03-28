@@ -30,15 +30,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget build(BuildContext context) {
     final themeData = AppConceptThemeProvider.get();
-    Image converBase64ToImage(base64Image) {
-      var _bytesImage = Base64Decoder().convert(base64Image);
-      return Image.memory(_bytesImage);
-    }
+ 
 
     ListTile makeListTile(PostModel post) => ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-          leading: converBase64ToImage(post.image),
+       
           title: Text(
             post.title != null ? post.title : "",
             overflow: TextOverflow.ellipsis,

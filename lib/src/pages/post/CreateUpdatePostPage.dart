@@ -11,7 +11,6 @@ import 'package:flutterapp/src/common/global.dart';
 import 'package:flutterapp/generated/app_localizations.dart';
 import 'package:flutterapp/src/common/lib.dart';
 import 'package:flutterapp/src/common/theme.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CreateUpdatePostPage extends StatefulWidget {
   final PostModel data;
@@ -22,35 +21,16 @@ class CreateUpdatePostPage extends StatefulWidget {
 
 class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
   final themeData = AppConceptThemeProvider.get();
-  File _image;
-  String base64Image;
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
   bool _isLoading = false;
   String _title;
   String _description;
-  Uint8List _bytesImage;
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 400);
-    setState(() {
-      _image = image;
-      List<int> imageBytes = _image.readAsBytesSync();
-      base64Image = base64.encode(imageBytes);
-      _bytesImage = Base64Decoder().convert(base64Image);
-    });
-  }
+
 
   Widget build(BuildContext context) {
-    if (base64Image == null && widget.data != null) {
-      base64Image = widget.data.image;
-      _bytesImage = Base64Decoder().convert(base64Image);
-    }
-    if (base64Image == null && widget.data == null) {
-      base64Image = base64ImageDefault;
-      _bytesImage = Base64Decoder().convert(base64Image);
-    }
-
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
@@ -85,13 +65,13 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                       });
                       _key.currentState.save();
                       if (widget.data != null) {
-                        PostService.update(widget.data.id,_title, _description, base64Image).listen((result) { 
+                        PostService.update(widget.data.id,_title, _description).listen((result) { 
                             if (result.data != null) {
                               Navigator.pop(context, true);
                           }
                         });
                       } else {
-                        PostService.add(_title, _description, base64Image).listen((result) {
+                        PostService.add(_title, _description).listen((result) {
                            if (result.data != null) {
                             Navigator.of(context).pop();
                           }
@@ -123,14 +103,7 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                   key: _key,
                   autovalidate: _validate,
                   child: Column(children: <Widget>[
-                    Container(
-                        width: 200,
-                        height: 200,
-                        child: GestureDetector(
-                          onTap: () => getImage(),
-                          child: Image.memory(_bytesImage),
-                        )),
-                    SizedBox(height: 50),
+                  
                     Container(
                       child: TextFormField(
                         initialValue:

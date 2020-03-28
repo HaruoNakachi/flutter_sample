@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
           title: "DEMO",
           theme: themeData,
           onGenerateRoute: generateRoute,
+          debugShowCheckedModeBanner: false,
           supportedLocales: [Locale('en', 'US')],
           localizationsDelegates: [
             AppLocalizations.delegate,
