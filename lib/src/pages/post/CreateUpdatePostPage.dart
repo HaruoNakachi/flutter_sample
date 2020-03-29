@@ -1,19 +1,17 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterapp/model/PostModel.dart';
 import 'package:flutterapp/services/PostServices.dart';
-import 'package:flutterapp/src/common/global.dart';
 import 'package:flutterapp/generated/app_localizations.dart';
 import 'package:flutterapp/src/common/lib.dart';
 import 'package:flutterapp/src/common/theme.dart';
+import 'package:flutterapp/src/pages/post/pickerImageMobile.dart';
+import 'package:flutterapp/src/pages/post/pickerImageWeb.dart';
+import 'dart:io' show Platform;
 
 class CreateUpdatePostPage extends StatefulWidget {
-  final PostModel data;
+  PostModel data;
   CreateUpdatePostPage({Key key, this.data}) : super(key: key);
   @override
   _CreateUpdatePostPageState createState() => _CreateUpdatePostPageState();
@@ -24,13 +22,13 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
   bool _isLoading = false;
-  String _title;
-  String _description;
-
-
 
   Widget build(BuildContext context) {
-   
+    var isWeb = true;
+    try {
+      Platform.isAndroid || Platform.isIOS ? isWeb = false : isWeb = true;
+    } catch (e) {}
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
@@ -64,15 +62,15 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                         _isLoading = true;
                       });
                       _key.currentState.save();
-                      if (widget.data != null) {
-                        PostService.update(widget.data.id,_title, _description).listen((result) { 
-                            if (result.data != null) {
-                              Navigator.pop(context, true);
+                      if (widget.data.id != null) { 
+                        PostService.update(widget.data).listen((result) {
+                          if (result.data != null) {
+                            Navigator.pop(context, true);
                           }
                         });
-                      } else {
-                        PostService.add(_title, _description).listen((result) {
-                           if (result.data != null) {
+                      } else { 
+                        PostService.add(widget.data).listen((result) {
+                          if (result.data != null) {
                             Navigator.of(context).pop();
                           }
                         });
@@ -92,8 +90,7 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
           ],
         ),
       )),
-      body: 
-      Stack(
+      body: Stack(
         children: <Widget>[
           SingleChildScrollView(
             child: Container(
@@ -103,7 +100,10 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                   key: _key,
                   autovalidate: _validate,
                   child: Column(children: <Widget>[
-                  
+                    isWeb
+                        ? PickerImageWeb(data: widget.data)
+                        : PickerImageMobile(data: widget.data),
+                    SizedBox(height: 50),
                     Container(
                       child: TextFormField(
                         initialValue:
@@ -119,7 +119,7 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                             : AppLocalizations.of(context)
                                 .translate('POST_TITLE_REQUIRED'),
                         onSaved: (String val) {
-                          _title = val;
+                          widget.data.title = val;
                         },
                       ),
                     ),
@@ -141,7 +141,7 @@ class _CreateUpdatePostPageState extends State<CreateUpdatePostPage> {
                             : AppLocalizations.of(context)
                                 .translate('POST_DESCRIPTION_REQUIRED'),
                         onSaved: (String val) {
-                          _description = val;
+                          widget.data.description = val;
                         },
                       ),
                     )

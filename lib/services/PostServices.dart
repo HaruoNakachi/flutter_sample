@@ -1,3 +1,4 @@
+import 'package:flutterapp/model/PostModel.dart';
 import 'package:flutterapp/src/common/global.dart';
 import "package:gql_exec/gql_exec.dart";
 import "package:gql/language.dart";
@@ -71,7 +72,7 @@ class PostService {
     return result;
   }
 
-  static Stream<Response> add(_title, _description,) {
+  static Stream<Response> add(PostModel data) {
     var result = link.request(
       Request(
         operation: Operation(
@@ -87,9 +88,10 @@ class PostService {
                 '''),
         ),
         variables: {
-          "createpostmodelinput": {
-            "title": _title,
-            "description": _description
+          "createpostmodelinput": { 
+            "title": data.title,
+            "description": data.description,
+            "image": data.image
           }
         },
       ),
@@ -97,7 +99,7 @@ class PostService {
     return result;
   }
 
-  static Stream<Response> update(_id, _title, _description) {
+  static Stream<Response> update(PostModel data) {
     var result = link.request(
       Request(
         operation: Operation(
@@ -114,9 +116,10 @@ class PostService {
         ),
         variables: {
           "updatepostmodelinput": {
-            "id": _id,
-            "title": _title,
-            "description": _description
+            "id": data.id,
+            "title": data.title,
+            "description": data.description,
+            "image": data.image
           }
         },
       ),
